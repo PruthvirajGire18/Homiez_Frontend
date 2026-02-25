@@ -30,7 +30,8 @@ const Signup = () => {
       const res = await api.post("/auth/signup", data);
       return res.data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      localStorage.setItem('token', data.token);
       toast.success("Account created successfully");
       queryClient.invalidateQueries(["authUser"]);
       navigate("/onboarding");

@@ -21,7 +21,8 @@ const Login = () => {
       const res = await api.post("/auth/login", data);
       return res.data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      localStorage.setItem('token', data.token);
       toast.success("Logged in successfully");
       queryClient.invalidateQueries(["authUser"]);
       navigate("/", { replace: true });
