@@ -24,7 +24,7 @@ const Login = () => {
     onSuccess: (data) => {
       localStorage.setItem("token", data.token);
       toast.success("Logged in successfully");
-      queryClient.invalidateQueries(["authUser"]);
+      queryClient.invalidateQueries({ queryKey: ["authUser"] }); // Updated to v5 object syntax
       navigate("/", { replace: true });
     },
     onError: (err) => {
@@ -44,9 +44,9 @@ const Login = () => {
   };
 
   return (
-    // Replaced min-h-screen with min-h-[100dvh] for mobile browser toolbars
-    <div className="flex min-h-[100dvh] items-center justify-center bg-zinc-950 p-4 text-zinc-100 sm:p-8">
-      <div className="w-full max-w-md rounded-2xl border border-zinc-800/60 bg-zinc-900/80 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl sm:p-8">
+    // Swapped flex centering for a safer scrolling approach on mobile keyboards
+    <div className="flex min-h-[100dvh] flex-col justify-center bg-zinc-950 px-4 py-12 text-zinc-100 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-md rounded-2xl border border-zinc-800/60 bg-zinc-900/80 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl sm:p-8">
         
         {/* Header */}
         <div className="mb-8 text-center">
@@ -78,14 +78,15 @@ const Login = () => {
               Email Address
             </label>
             <div className="group relative">
-              {/* Icon color reacts to input focus */}
-              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-500 transition-colors group-focus-within:text-emerald-500" />
+              <Mail className="absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-zinc-500 transition-colors group-focus-within:text-emerald-500" />
               <input
                 id="email"
                 type="email"
                 name="email"
+                inputMode="email"
+                autoComplete="email"
                 placeholder="you@example.com"
-                className="h-11 w-full rounded-xl border border-zinc-800 bg-zinc-950/50 pl-11 pr-4 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-all focus:border-emerald-500/50 focus:bg-zinc-900 focus:ring-2 focus:ring-emerald-500/20"
+                className="h-12 w-full rounded-xl border border-zinc-800 bg-zinc-950/50 pl-11 pr-4 text-base text-zinc-100 placeholder-zinc-600 outline-none transition-all focus:border-emerald-500/50 focus:bg-zinc-900 focus:ring-2 focus:ring-emerald-500/20 sm:h-11 sm:text-sm"
                 value={logindata.email}
                 onChange={handleInputChange}
                 required
@@ -99,23 +100,23 @@ const Login = () => {
               Password
             </label>
             <div className="group relative">
-              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-500 transition-colors group-focus-within:text-emerald-500" />
+              <Lock className="absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-zinc-500 transition-colors group-focus-within:text-emerald-500" />
               <input
                 id="password"
                 type={showPassword ? "text" : "password"}
                 name="password"
+                autoComplete="current-password"
                 placeholder="Enter your password"
-                className="h-11 w-full rounded-xl border border-zinc-800 bg-zinc-950/50 pl-11 pr-12 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-all focus:border-emerald-500/50 focus:bg-zinc-900 focus:ring-2 focus:ring-emerald-500/20"
+                className="h-12 w-full rounded-xl border border-zinc-800 bg-zinc-950/50 pl-11 pr-12 text-base text-zinc-100 placeholder-zinc-600 outline-none transition-all focus:border-emerald-500/50 focus:bg-zinc-900 focus:ring-2 focus:ring-emerald-500/20 sm:h-11 sm:text-sm"
                 value={logindata.password}
                 onChange={handleInputChange}
                 required
               />
-              {/* Expanded touch target for mobile */}
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? "Hide password" : "Show password"}
-                className="absolute right-1 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500"
+                className="absolute right-1 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 sm:h-9 sm:w-9"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
@@ -126,7 +127,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={isPending}
-            className="btn btn-primary mt-2 flex h-11 w-full items-center justify-center rounded-xl border-0 text-base font-semibold normal-case shadow-lg shadow-primary/20 transition-all duration-200 active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100"
+            className="btn btn-primary mt-2 flex h-12 w-full items-center justify-center rounded-xl border-0 text-base font-semibold normal-case shadow-lg shadow-primary/20 transition-all duration-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70 disabled:active:scale-100 sm:h-11"
           >
             {isPending ? (
               <>

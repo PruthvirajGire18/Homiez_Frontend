@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 
 import {
   Chat as StreamChatUI,
@@ -50,7 +51,7 @@ const Chat = () => {
         await client.connectUser(
           {
             id: authUser._id,
-            name: authUser.name,
+            name: authUser.fullname || authUser.name, // Fallback safety
             image: authUser.profilePicture,
           },
           tokenData.token
@@ -67,7 +68,7 @@ const Chat = () => {
         setChannel(chatChannel);
       } catch (error) {
         console.error(error);
-        toast.error("Failed to initialize chat");
+        toast.error("Failed to initialize secure chat.");
       }
     };
 
@@ -92,37 +93,44 @@ const Chat = () => {
       text: `I started a video call. Join here:\n${callUrl}`,
     });
 
-    toast.success("Video call started");
+    // You might want to actually navigate the caller to the call page immediately here!
+    // navigate(`/call/${channel.id}`);
   };
 
-  // Premium Loading State
+  // Premium Loading State matches Layout.jsx
   if (isLoading || !chatClient || !channel) {
     return (
       <div className="flex h-full min-h-0 flex-1 items-center justify-center bg-zinc-950 px-4">
         <div className="flex animate-pulse items-center gap-3.5 rounded-2xl border border-zinc-800/80 bg-zinc-900/90 px-5 py-3.5 shadow-xl shadow-black/40 backdrop-blur-md">
-          <div className="loading loading-spinner loading-md text-emerald-500" />
-          <span className="text-sm font-medium tracking-wide text-zinc-300">Connecting to secure chat...</span>
+          <Loader2 className="h-5 w-5 animate-spin text-primary" />
+          <span className="text-sm font-medium tracking-wide text-zinc-300">
+            Connecting to secure chat...
+          </span>
         </div>
       </div>
     );
   }
 
   return (
-    // Flex-1 and overflow-hidden ensure the chat stays strictly within the viewport, crucial for mobile keyboards
-    <div className="kollabb-chat flex h-full w-full flex-1 flex-col overflow-hidden bg-zinc-950 sm:rounded-xl sm:border sm:border-zinc-800/60 sm:shadow-2xl">
+    // min-h-0 is absolutely crucial here to stop flex children from expanding beyond the screen when the mobile keyboard opens
+    <div className="kollabb-chat flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden bg-zinc-950 sm:rounded-xl sm:border sm:border-zinc-800/60 sm:shadow-2xl">
       <StreamChatUI client={chatClient} theme="messaging dark">
         <Channel channel={channel}>
           <Window>
-            {/* Header Overlay Refactor */}
-            <div className="relative flex w-full flex-col border-b border-zinc-800/80 bg-zinc-950/95 backdrop-blur-md supports-[backdrop-filter]:bg-zinc-950/80">
-              {/* Padding right ensures Stream's header text doesn't slide under our custom button */}
-              <div className="w-full pr-[110px] sm:pr-[130px]">
+            
+            {/* Header Area */}
+            <div className="relative flex w-full flex-col border-b border-zinc-800/80 bg-zinc-950/95">
+              {/* Added responsive right padding to prevent Stream's text from hiding under our CallButton */}
+              <div className="w-full pr-[140px] sm:pr-[160px]">
                 <ChannelHeader />
               </div>
               
-              {/* Call Button Container */}
-              <div className="pointer-events-none absolute inset-y-0 right-3 z-20 flex items-center sm:right-5">
-                <div className="pointer-events-auto transition-transform active:scale-95">
+              {/* Call Button Container - perfectly centered vertically */}
+              <div className="absolute right-3 top-1/2 z-20 -translate-y-1/2 sm:right-5">
+                {/* Since we made CallButton w-full on mobile previously, we wrap it 
+                  in a fixed width or w-auto container here so it doesn't break the absolute positioning 
+                */}
+                <div className="w-auto shadow-lg shadow-black/20 rounded-full">
                   <CallButton handleVideoCall={handleVideoCall} />
                 </div>
               </div>
@@ -131,10 +139,13 @@ const Chat = () => {
             {/* Main Chat Area */}
             <div className="flex min-h-0 flex-1 flex-col bg-zinc-950/50">
               <MessageList />
-              <div className="border-t border-zinc-800/50 bg-zinc-950 p-2 sm:p-4">
+              
+              {/* Input Area - Added pb-4 for mobile bottom safe area */}
+              <div className="border-t border-zinc-800/50 bg-zinc-950 p-2 pb-4 sm:p-4">
                 <MessageInput focus />
               </div>
             </div>
+
           </Window>
           <Thread />
         </Channel>

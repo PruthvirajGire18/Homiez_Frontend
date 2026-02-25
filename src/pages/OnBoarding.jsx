@@ -9,7 +9,6 @@ const OnBoarding = () => {
   const { authUser } = useAuthUser();
   const queryClient = useQueryClient();
 
-  // Added profilePicture to initial state so the preview updates dynamically
   const [formData, setFormData] = useState({
     fullname: authUser?.fullname || "",
     bio: authUser?.bio || "",
@@ -24,7 +23,7 @@ const OnBoarding = () => {
     },
     onSuccess: () => {
       toast.success("Onboarding completed successfully");
-      queryClient.invalidateQueries(["authUser"]);
+      queryClient.invalidateQueries({ queryKey: ["authUser"] }); // v5 syntax
     },
     onError: () => {
       toast.error("Onboarding failed. Please try again.");
@@ -48,9 +47,9 @@ const OnBoarding = () => {
   };
 
   return (
-    // Changed to 100dvh for proper mobile browser toolbar handling
-    <div className="flex min-h-[100dvh] items-center justify-center bg-zinc-950 p-4 text-zinc-100 sm:p-8">
-      <div className="w-full max-w-lg rounded-2xl border border-zinc-800/60 bg-zinc-900/80 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl sm:p-8">
+    // Swapped flex centering for safe scrolling when mobile keyboard is open
+    <div className="flex min-h-[100dvh] flex-col justify-center bg-zinc-950 px-4 py-12 text-zinc-100 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-lg rounded-2xl border border-zinc-800/60 bg-zinc-900/80 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl sm:p-8">
         
         {/* Header */}
         <div className="mb-8 text-center">
@@ -65,9 +64,8 @@ const OnBoarding = () => {
         {/* Avatar Section */}
         <div className="mb-8 flex flex-col items-center gap-4">
           <div className="avatar group relative">
-            <div className="h-24 w-24 rounded-full bg-zinc-800 ring-4 ring-zinc-800/50 ring-offset-4 ring-offset-zinc-900 transition-all duration-300 group-hover:ring-emerald-500/30">
+            <div className="h-24 w-24 shrink-0 rounded-full bg-zinc-800 ring-4 ring-zinc-800/50 ring-offset-4 ring-offset-zinc-900 transition-all duration-300 group-hover:ring-emerald-500/30">
               <img
-                // Now pulls from formData first to show the generated preview
                 src={formData.profilePicture || "/default-profile.png"}
                 alt="Profile Preview"
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -79,7 +77,7 @@ const OnBoarding = () => {
           <button
             onClick={handleClick}
             type="button"
-            className="group flex h-10 items-center gap-2 rounded-lg border border-zinc-700/60 bg-zinc-800/50 px-4 text-sm font-medium text-zinc-300 transition-all duration-200 hover:bg-zinc-700/50 hover:text-zinc-100 active:scale-95"
+            className="group flex h-10 items-center justify-center gap-2 rounded-xl border border-zinc-700/60 bg-zinc-800/50 px-4 text-sm font-medium text-zinc-300 transition-all duration-200 hover:bg-zinc-700/50 hover:text-zinc-100 active:scale-95"
           >
             <Sparkles className="h-4 w-4 text-emerald-400 transition-transform group-hover:scale-110" />
             Generate Random Avatar
@@ -88,6 +86,7 @@ const OnBoarding = () => {
 
         {/* Form Section */}
         <form onSubmit={handleSubmit} className="space-y-5">
+          
           <div className="space-y-1.5">
             <label htmlFor="fullname" className="block text-sm font-medium text-zinc-300">
               Full Name
@@ -99,7 +98,8 @@ const OnBoarding = () => {
               value={formData.fullname}
               onChange={handleChange}
               placeholder="Enter your full name"
-              className="h-11 w-full rounded-xl border border-zinc-800 bg-zinc-950/50 px-4 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-all focus:border-emerald-500/50 focus:bg-zinc-900 focus:ring-2 focus:ring-emerald-500/20"
+              // text-base on mobile prevents iOS zoom, sm:text-sm returns to standard on desktop
+              className="h-12 w-full rounded-xl border border-zinc-800 bg-zinc-950/50 px-4 text-base text-zinc-100 placeholder-zinc-600 outline-none transition-all focus:border-emerald-500/50 focus:bg-zinc-900 focus:ring-2 focus:ring-emerald-500/20 sm:h-11 sm:text-sm"
               required
             />
           </div>
@@ -115,7 +115,8 @@ const OnBoarding = () => {
               onChange={handleChange}
               placeholder="What do you do? What are your interests?"
               rows="3"
-              className="min-h-[80px] w-full resize-y rounded-xl border border-zinc-800 bg-zinc-950/50 px-4 py-3 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-all focus:border-emerald-500/50 focus:bg-zinc-900 focus:ring-2 focus:ring-emerald-500/20"
+              // text-base prevents iOS zoom. Added min-h-[100px] for a better mobile tap target
+              className="min-h-[100px] w-full resize-y rounded-xl border border-zinc-800 bg-zinc-950/50 px-4 py-3 text-base text-zinc-100 placeholder-zinc-600 outline-none transition-all focus:border-emerald-500/50 focus:bg-zinc-900 focus:ring-2 focus:ring-emerald-500/20 sm:text-sm"
               required
             />
           </div>
@@ -131,7 +132,8 @@ const OnBoarding = () => {
               value={formData.location}
               onChange={handleChange}
               placeholder="City, Country"
-              className="h-11 w-full rounded-xl border border-zinc-800 bg-zinc-950/50 px-4 text-sm text-zinc-100 placeholder-zinc-600 outline-none transition-all focus:border-emerald-500/50 focus:bg-zinc-900 focus:ring-2 focus:ring-emerald-500/20"
+              // text-base prevents iOS zoom
+              className="h-12 w-full rounded-xl border border-zinc-800 bg-zinc-950/50 px-4 text-base text-zinc-100 placeholder-zinc-600 outline-none transition-all focus:border-emerald-500/50 focus:bg-zinc-900 focus:ring-2 focus:ring-emerald-500/20 sm:h-11 sm:text-sm"
               required
             />
           </div>
@@ -140,7 +142,7 @@ const OnBoarding = () => {
             <button
               type="submit"
               disabled={isPending}
-              className="btn btn-primary flex h-11 w-full items-center justify-center rounded-xl border-0 text-base font-semibold normal-case shadow-lg shadow-primary/20 transition-all duration-200 active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100"
+              className="btn btn-primary flex h-12 w-full items-center justify-center rounded-xl border-0 text-base font-semibold normal-case shadow-lg shadow-primary/20 transition-all duration-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70 disabled:active:scale-100 sm:h-11"
             >
               {isPending ? (
                 <>
