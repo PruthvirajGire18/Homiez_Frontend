@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const api = axios.create({
-  baseURL: "https://homiez18.netlify.app/api",
+  baseURL: "https://homiez-backend.vercel.app/api",
   withCredentials: true, // 🔥 MUST for cookies
 })
 
