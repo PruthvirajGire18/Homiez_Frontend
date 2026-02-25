@@ -102,33 +102,36 @@ const Chat = () => {
   /* ------------------ LOADING ------------------ */
   if (isLoading || !chatClient || !channel) {
     return (
-      <div className="flex items-center justify-center h-screen text-zinc-200">
-        Loading chat...
+      <div className="flex h-screen items-center justify-center bg-zinc-950 text-zinc-200">
+        <div className="flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900/80 px-4 py-3 shadow-sm">
+          <span className="loading loading-spinner loading-sm" />
+          <span className="text-sm font-medium">Loading chat...</span>
+        </div>
       </div>
     );
   }
 
   /* ------------------ UI ------------------ */
   return (
-    <div className="h-screen bg-zinc-900">
+    <div className="h-screen bg-zinc-950">
       <StreamChatUI client={chatClient} theme="messaging dark">
-       <Channel channel={channel}>
-  <Window>
-    <div className="relative">
-      <ChannelHeader />
+        <Channel channel={channel}>
+          <Window>
+            <div className="relative">
+              <ChannelHeader />
 
-      {/* Video Call Button – Top Right */}
-      <div className="absolute top-2 right-3 z-50">
-        <CallButton handleVideoCall={handleVideoCall} />
-      </div>
-    </div>
+              {/* Video Call Button – Top Right */}
+              <div className="absolute top-2 right-3 z-50">
+                <CallButton handleVideoCall={handleVideoCall} />
+              </div>
+            </div>
 
-    <MessageList />
-    <MessageInput focus />
-  </Window>
+            <MessageList />
+            <MessageInput focus />
+          </Window>
 
-  <Thread />
-</Channel>
+          <Thread />
+        </Channel>
       </StreamChatUI>
     </div>
   );
