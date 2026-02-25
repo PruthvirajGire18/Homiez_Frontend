@@ -1,11 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../api/api";
-import useAuthUser from "../hooks/useAuthUser";
 import NoFriendsFound from "./NoFriendsFound";
 import FriendCard from "../components/FriendCard";
 
 const Home = () => {
-  const { authUser } = useAuthUser();
   const queryClient = useQueryClient();
 
   const { data: friends = [] } = useQuery({
@@ -32,19 +30,19 @@ const Home = () => {
   });
 
   return (
-    <div className="space-y-6 lg:space-y-8">
+    <div className="space-y-8">
       {/* FRIENDS SECTION */}
-      <section className="rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-4 shadow-sm sm:p-6 lg:rounded-2xl lg:p-8">
-        <div className="mb-6 flex items-center justify-between gap-3">
+      <section className="rounded-2xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-xl shadow-black/20 sm:p-6">
+        <div className="mb-5 flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-lg font-semibold text-zinc-100 sm:text-xl lg:text-2xl">
+            <h2 className="text-xl font-semibold text-zinc-100 sm:text-2xl">
               Your Friends
             </h2>
             <p className="mt-1 text-sm text-zinc-400">
               People you are already connected with.
             </p>
           </div>
-          <span className="badge badge-ghost border-zinc-700 bg-zinc-900 text-zinc-300 text-xs">
+          <span className="badge badge-ghost border-zinc-700 bg-zinc-900 text-zinc-300">
             {friends.length}
           </span>
         </div>

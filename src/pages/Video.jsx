@@ -65,31 +65,28 @@ const Video = () => {
     }
     inItCall();
   },[tokenData,authUser,callId])
-  if (isLoading || isConnecting) {
+  if(isLoading || isConnecting){
     return (
-      <div className="flex h-screen items-center justify-center bg-zinc-950 text-zinc-200">
-        <div className="flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900/80 px-4 py-3 shadow-sm">
-          <span className="loading loading-spinner loading-sm" />
-          <span className="text-sm font-medium">Connecting to call...</span>
-        </div>
+      <div className="flex items-center justify-center h-screen text-zinc-200">
+        Loading call...
       </div>
     );
   }
   return (
-    <div className="h-screen bg-zinc-950">
-      {client && call ? (
+   <>
+    <div>
+      {client && call?(
         <StreamVideo client={client}>
           <StreamCall call={call}>
-            <CallContent />
+              <CallContent/>
           </StreamCall>
         </StreamVideo>
-      ) : (
-        <div className="flex h-screen items-center justify-center text-zinc-400">
-          Call not found.
-        </div>
+      ):(
+        <p>Call not found.</p>
       )}
     </div>
-  );
+   </>
+  )
 }
 const CallContent=()=>{
   const {useCallCallingState}=useCallStateHooks();

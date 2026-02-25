@@ -20,9 +20,9 @@ const App = () => {
   if(isLoading){
     return (
       <div className="grid min-h-screen place-items-center bg-zinc-950 text-zinc-200">
-        <div className="flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900/80 px-4 py-3 shadow-sm">
+        <div className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900/80 px-4 py-3 shadow-lg shadow-black/30">
           <span className="loading loading-spinner loading-sm text-primary" />
-          <span className="text-sm font-medium">Loading Kollabb...</span>
+          <span className="text-sm font-medium">Please wait...</span>
         </div>
       </div>
     )
