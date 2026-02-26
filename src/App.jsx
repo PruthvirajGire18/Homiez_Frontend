@@ -12,6 +12,8 @@ import Chat from './pages/Chat';
 import Video from './pages/Video';
 import useAuthUser from './hooks/useAuthUser';
 import Layout from './components/Layout';
+import Friends from './pages/Friends';
+
 
 const App = () => {
   const { authUser, isLoading } = useAuthUser();
@@ -116,6 +118,19 @@ const App = () => {
             )
           } 
         />
+
+        <Route
+          path="/friends"
+          element={
+            isAuthenticated && isOnBoarded ? (
+              <Layout showSidebar={true}>
+                <Friends />
+              </Layout>
+            ):(
+              <Navigate to={!isAuthenticated ? "/login":"/onboarding"} replace/>
+            )
+          }
+          />
         
       </Routes>
 
