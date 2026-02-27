@@ -66,6 +66,15 @@ const Navbar = () => {
           </div>
         </div>
 
+        {/* About link */}
+        <a
+          href="/about"
+          className="group flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-zinc-400 transition-all hover:bg-zinc-800/10 hover:text-zinc-100 active:scale-95"
+          aria-label="About"
+        >
+          <span className="text-lg font-medium">i</span>
+        </a>
+
         {/* Divider line for visual hierarchy */}
         <div className="h-6 w-px bg-zinc-800/80" aria-hidden="true" />
 

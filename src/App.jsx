@@ -13,6 +13,8 @@ import Video from './pages/Video';
 import useAuthUser from './hooks/useAuthUser';
 import Layout from './components/Layout';
 import Friends from './pages/Friends';
+import About from './pages/About';
+
 
 
 const App = () => {
@@ -131,6 +133,15 @@ const App = () => {
             )
           }
           />
+          <Route
+          path="/about"
+          element={
+            <Layout showSidebar={true}>
+              <About />
+            </Layout>
+          }
+          />
+
         
       </Routes>
 

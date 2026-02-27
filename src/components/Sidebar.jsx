@@ -13,6 +13,7 @@ const Sidebar = () => {
     { path: "/", label: "Home", icon: Home },
     { path: "/friends", label: "Friends", icon: Users },
     { path: "/notifications", label: "Notifications", icon: Bell },
+    { path: "/about", label: "About", icon: () => <span className="inline-block h-5 w-5 text-zinc-400">i</span> },
   ];
 
   return (
