@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Bell, LogOut, Loader2 } from "lucide-react";
+import { Bell, LogOut, Loader2, Info } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAuthUser from "../hooks/useAuthUser";
 import api from "../api/api";
@@ -67,13 +67,13 @@ const Navbar = () => {
         </div>
 
         {/* About link */}
-        <a
-          href="/about"
+        <Link
+          to="/about"
           className="group flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-zinc-400 transition-all hover:bg-zinc-800/10 hover:text-zinc-100 active:scale-95"
           aria-label="About"
         >
-          <span className="text-lg font-medium">i</span>
-        </a>
+          <Info className="h-5 w-5" />
+        </Link>
 
         {/* Divider line for visual hierarchy */}
         <div className="h-6 w-px bg-zinc-800/80" aria-hidden="true" />

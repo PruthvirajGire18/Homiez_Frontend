@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Users, Bell } from "lucide-react";
+import { Home, Users, Bell, Info } from "lucide-react";
 import useAuthUser from "../hooks/useAuthUser";
 
 const Sidebar = () => {
@@ -13,7 +13,7 @@ const Sidebar = () => {
     { path: "/", label: "Home", icon: Home },
     { path: "/friends", label: "Friends", icon: Users },
     { path: "/notifications", label: "Notifications", icon: Bell },
-    { path: "/about", label: "About", icon: () => <span className="inline-block h-5 w-5 text-zinc-400">i</span> },
+    { path: "/about", label: "About", icon: Info },
   ];
 
   return (
